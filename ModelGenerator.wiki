@@ -21,9 +21,14 @@ The graph model described above allows arbitrary relations between arbitrary num
 
 These aren't necessarily things we expect an algorithm to reliably be able to pull out. It's necessary for this to be supported, however, to see how far our algorithms can go.
 
-= Details =
+=Assorted Notes=
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+The "pretty-printing" functions here are actually quite critical to making the system usable. Implementing them is going to be hard.
+
+Graph generation is the area of code that's going to have, by far, the most churn. This code needs to be written clearly and in a heavily-commented way, with as much extract-method-for-code-reuse application as possible. This will make it easier to reorganize the code as experimentation reveals it to be necessary. 
+
+=Design=
+_package name_: modelgen
+
+_class_: Model. Contains/references the entire generated model; allows queries about the size, general traversal/statistics/description of the model as a whole. Supports a query operation that yields a node:float map of the value of every node off the next generated row; also allows 0-ary functions to be overridden instead of allowed to freely generate values.
+_class_: Node. Represents one calculation node of the model. Stores a function, but only has a value in the context of a query to the model. Externally useful primarily for traversing the shape of the model (which will be necessary for the Column Picker to pick columns), rendering/printing/describing the model, or as a key to pick results out of a Model query. As such, Node is stably hashable- but due to its "position-in-a-graph"-based nature, this hash is purely by object identity.
