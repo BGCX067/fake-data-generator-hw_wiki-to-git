@@ -1,0 +1,29 @@
+#summary Spec for the model generator.
+#labels Phase-Design,incomplete
+
+= Overview =
+
+The model generator is the fundamental core of fake-data-generator. It generates the arbitrary relations that will exist in the synthesized data set, which the machine learning algorithms will hopefully be able to pick out again.
+
+==What's a model?==
+
+In this software, a model is represented as a directed acyclic graph of arbitrary size. The graph is _not_ required to be a single connected region. (In fact, it is better for it _not_ to be fully connected, as independent islands of features are an important test for a machine learning algorithm. Is it incorrectly "bridging the gap"?)
+
+Each node of this graph represents a N-ary function that returns a single floating-point value. Discretization functions that return discrete values within floating-point space are entirely legal. N is the in-degree of the node. Nodes with an in-degree of 0 are independent variables, and are the random source of data; they are either constant or some function of `rand()`, with the latter by far being the most common and useful case.
+
+The model therefore defines all the intended relationships between any two aspects of the data, and provides a computationally-tractable sequence (calculable with topological sort) of operations to generate a row of data. Generating rows independently from new random values for the random independent variables creates a data set.
+
+==What are we generating?==
+
+Fake, but plausible, data that we know the entire relation-space of.
+
+The graph model described above allows arbitrary relations between arbitrary numbers of factors. Factors are chosen at random (within certain restrictions) to actually be displayed in the output model, so a machine learning algorithm will have to contend with arbitrarily complex indirect links in the data.
+
+These aren't necessarily things we expect an algorithm to reliably be able to pull out. It's necessary for this to be supported, however, to see how far our algorithms can go.
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
