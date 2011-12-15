@@ -21,7 +21,7 @@ The following features are intended for the software:
 = Modules/Architecture =
 The following chunks are probably going to wind up in separate Python files and can be developed semi-separately:
   * ModelGenerator (configurable, reads from some configuration object)
-  * PluginRngine to import modules specially designed as Stuff The Model Can Do
+  * PluginEngine to import modules specially designed as Stuff The Model Can Do
   * DefaultStuff The Model Can Do
   * ConfigurationManager (config file reader? json file reader? also parses command line overrides)
   * EntryPoint
