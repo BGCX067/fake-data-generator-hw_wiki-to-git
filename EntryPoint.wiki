@@ -1,0 +1,19 @@
+#summary Design for the main method.
+#labels Phase-Design
+
+= Overview =
+
+This is the `__main__.py` for the module. Not `__init__.py`, since this is going to be the command line script operations that we almost certainly don't want to have happen on import!
+
+It pretty much imports all the other modules, imports optparse (argparse, if we want 2.7+ only), then hooks them together in order and runs it.
+
+The entry point is not intended to be an importable script.
+
+Approximate order of operation is:
+  # ConfigManager
+  # PluginEngine (probably including DefaultStuff if no other plugin/s specified)
+  # If loading an existing model: ModelSaveLoad, using objects from ModelGenerator
+  # Else: ModelGenerator
+  # DataGenerator
+  # Call into Model object from ModelGenerator to write pretty description of model
+  # If asked to save model: ModelSaveLoad
