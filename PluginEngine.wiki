@@ -12,6 +12,9 @@ The "relations of interest" problem is very different from the "shape of the rel
 
 =Notes=
 `import warnings` for the "not actually a valid plugin" warning messages.
+
+Python code introspection libraries will get you very far here.
+
 =Design=
 _module name:_ plugin_mgmt
 ==Plugin SPI==
