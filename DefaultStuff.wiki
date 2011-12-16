@@ -1,0 +1,28 @@
+#labels Phase-Design
+=Overview=
+
+Since all relations come only from the PluginManager, the tool is useless with at least one plugin. We should think about what default operations we want to support.
+
+=Operations to Support=
+==0ary==
+  * uniform 0-1
+  * Gaussian mean 0.5 stddev 0.125
+  * constant 0.5
+  * [http://en.wikipedia.org/wiki/Bathtub_curve Bathtub curve] 0-1
+==1ary==
+  * Negative
+  * Log transform (because we honestly see that in a lot of our data)
+  * Random log transform 25% (yep, we see that one too)
+  * cos(2pi `*` x)
+==2ary==
+  * Four calculator functions
+  * XOR-like function (*this is the big important one*)
+  * Sum-and-logit transformation
+  * Abs difference
+==3ary==
+==varargs==
+  * Sum
+  * Average
+  * Product
+  * Stddev
+  * Range
