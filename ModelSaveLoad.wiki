@@ -1,0 +1,11 @@
+#summary Module to handle saving and loading of models. It doesn't exist.
+
+= Introduction =
+
+Any randomized system has some (extremely small) chance of wild malfunction. It is possible that a model could inadvertently produce a wildly non-characteristic data set. For this reason, models themselves must be re-importable; multiple data sets built off one single model can be used to confirm the results of an algorithm, or determine if it is or is not consistent compared to other similar algorithms. Fake-data-generator runs in one pass, so saving and loading entire models is the easiest way to generate additional datasets.
+
+The entire model is a non-complicated Python object, so no module could possibly be any simpler or a more helpful abstraction than the single calls to cpickle's load/save functions. Write out the model using cpickle, read it back in the same way.
+
+= Details =
+
+This isn't a module. This is a single call to `cpickle.`
