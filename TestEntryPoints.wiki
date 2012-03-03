@@ -1,0 +1,52 @@
+#summary Top-level index of alternate entry points to test/verification/demo code.
+#labels EntryPoint,Phase-Implementation
+
+= Introduction =
+
+To smoke test and experiment with implementation during development, some classes were given if-name-equals-`__main__` regions that are not expected to be part of any final pipeline or tool system. 
+
+Because it may be useful to repeat these tests, these alternate entry points are listed here.
+
+= Modules with Alternate Entry Points =
+
+==model==
+
+The entry point in `model` is the present CrudePrototype of the system. `model.py` as a script takes no parameters and behaves as follows:
+
+  # Build a random model of size 50 with the default plugins and construction settings I found to work reasonably well (see the file itself for details)
+  # Write a GraphViz-formatted DOT file to `E:\debris\whatever.gv`, which refers to the scratch space on the large hard drive on my dev box. Someone running this will almost certainly need to change this path; alter line 407.
+  # Write a fake data file to `E:\debris\fakeData.tsv`, formatted like an Excel output text data file. The first line of this file is a (highly, if tersely, descriptive) header; subsequent lines are data generated as per the model data generation algorithm. This data is *not* subject to noise. This file contains 200 samples; change line 414 to alter this count.
+
+This is very similar to the final output format expected by the tool- a Graphviz diagram alongside a fake dataset. 
+
+==candidate_test_pruners==
+
+This entire file, as it stands, is for testing purposes; the pruners will wind up split out into plugins soon. As a script, this module generates some number of graphs, prunes a copy of each graph with each pruner listed in the code, and saves the results as GraphViz files. This exists to allow discussion and evaluation of the different pruning strategies.
+
+The script requires eight parameters (yikes!), six of which specify parameters for graph generation, one of which is the root of output destinations, one of which specifies the number of trials:
+
+||*Position*||*Name*||*Description*||
+||1||nPoints||Number of nodes in each generated graph.||
+||2||nSeeds||Number of 0-ary nodes (roots) of each graph.||
+||3||r0||A floating point value that affects the degree to which the starting points "split" the graph.||
+||4||delta||A floating point value that affects the shape of clusters in the graph and the way it splays.||
+||5||spread||A floating-point value between 0 and 1 that affects how many clusters are formed.||
+||6||lumpage||An integer between 0 and nSeeds that affects how points are placed in clusters.||
+||7||outputNameRoot||A string representing a directory path and filename prefix. This will be string-suffixed with the name of the pruner, the number of the trial, and the ".gv" GraphViz file extension to save the result tables.
+||8||nTrials||An integer representing how many graphs to generate, prune, and save.||
+
+Parameters 1-6 are passed to the SpiralPointDistribution module, which is the core of how this software generates interaction-network-shaped graphs. The description of the parameters is sketchy because the entire algorithm is sketchy. Please see its page for more details.
+
+==spiralPointDistribution==
+
+==Several modules in ModelBehaviors==
+
+= Scripts that are special tools =
+
+==results2dot==
+
+==yapsyPluginInfoEverything==
+
+= Modules notably lacking an alternate entry point =
+
+==pointsToOutwardDigraph==
