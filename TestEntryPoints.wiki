@@ -32,7 +32,7 @@ The script requires eight parameters (yikes!), six of which specify parameters f
 ||4||delta||A floating point value that affects the shape of clusters in the graph and the way it splays.||
 ||5||spread||A floating-point value between 0 and 1 that affects how many clusters are formed.||
 ||6||lumpage||An integer between 0 and nSeeds that affects how points are placed in clusters.||
-||7||outputNameRoot||A string representing a directory path and filename prefix. This will be string-suffixed with the name of the pruner, the number of the trial, and the ".gv" GraphViz file extension to save the result tables.
+||7||outputNameRoot||A string representing a directory path and filename prefix. This will be string-suffixed with the name of the pruner, the number of the trial, and the ".gv" GraphViz file extension to save the result tables.||
 ||8||nTrials||An integer representing how many graphs to generate, prune, and save.||
 
 Parameters 1-6 are passed to the SpiralPointDistribution module, which is the core of how this software generates interaction-network-shaped graphs. The description of the parameters is sketchy because the entire algorithm is sketchy. Please see its page for more details.
