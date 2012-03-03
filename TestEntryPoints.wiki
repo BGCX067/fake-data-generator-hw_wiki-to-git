@@ -39,6 +39,27 @@ Parameters 1-6 are passed to the SpiralPointDistribution module, which is the co
 
 ==spiralPointDistribution==
 
+The entry point in `spiralPointDistribution.py` tests the first stage of model generation: the computational geometry step where a clustered pattern of points (in cartesian space, generated primarily by polar math) is built, then triangulated. (`pointsToOutwardDigraph.py` converts this triangulation into an abstract graph.)
+
+Run as a script, it does one of two things:
+  * Runs doctests on the helper functions in the module.
+  * Generates a point distribution and uses matplotlib to draw it, as well as its triangulation.
+
+To run the doctests, use the `--doctest` flag.
+
+Generting a distribution requires six parameters:
+
+||*Position*||*Name*||*Description*||
+||1||nPoints||Number of nodes in each generated graph.||
+||2||nSeeds||Number of 0-ary nodes (roots) of each graph.||
+||3||r0||A floating point value that affects the degree to which the starting points "split" the graph.||
+||4||delta||A floating point value that affects the shape of clusters in the graph and the way it splays.||
+||5||spread||A floating-point value between 0 and 1 that affects how many clusters are formed.||
+||6||lumpage||An integer between 0 and nSeeds that affects how points are placed in clusters.||
+
+If run with these parameters, the program will draw a plot of the points with its triangulation overlaid. This can be saved to a file. This entry point is _very_ useful for experimenting with point generation settings to see the sorts of graph shapes it might inspire and will probably remain.
+
+
 ==Several modules in ModelBehaviors==
 
 = Scripts that are special tools =
