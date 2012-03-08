@@ -1,0 +1,29 @@
+#summary SPI for behavior plugins.
+#labels api,spi,plugin,Phase-Implementation,Featured
+
+= Introduction =
+
+To allow for rapid and flexible development of potentially-realistic fake interaction networks, fake-data-generator uses a plugin system to manage the various behaviors that the model can use for each node of the graph.
+
+A behavior is a function that takes some number of inputs (which can be order-sensitive) from other nodes in the graph (or none, for generators), and returns a value. The function is _not_ required to be deterministic. Results will be cached inside the model itself to provide consistent views of nondeterministic functions; the model behavior function doesn't need to implement this itself.
+
+IModelBehavior is the plugin interface defined in model.py. It has four things that must be overridden: two fields and two functions. The fields are implemented as properties in the IModelBehavior base class, but this is an implementation detail used to raise a NotImplemented; derived classes should probably just use values instead.
+
+IModelBehavior objects must have an `__init__` that takes no args other than `self`, due to Yapsy's plugin loading model. For the same reason, only one plugin can exist per file.
+
+
+= Details =
+
+To write a plugin, create a file that contains exactly one class inheriting from IModelBehavior, then create an appropriate .yapsy-plugin file associated with it, providing metadata and informing the Fake Data Generator that your .py script is, indeed, actually a plugin.
+
+==IModelBehavior requirements==
+
+Plain `__init__`: If your class has an `__init__` method, it must take no arguments other than `self`.
+
+`calculate`: A function in as many arguments as you'd like. This is the calculation core of your function. Take the arguments, and produce a new value of the same type as a result. While this is typically working entirely in floating-point space, there is no reason you couldn't build a batch of plugins that works only with int, or even string. model.py doesn't typecheck here. However, your IModelBehavior implementation probably shouldn't either- instead, document your type expectations and requirements, and expect the user to load your plugin only alongside other plugins that use the same data type. This function may use *args. Keyword arguments will never be passed; all arguments will be passed positionally.
+
+`arity`: A 2-tuple (or other type that can be indexed with `[0]` and `[1]`, but only a 2-tuple is really practical) representing how many inputs your function takes. Especially if you have variable arity due to an *args parameter, the model has no way to determine the number of inputs your function can handle. The model generator needs to know this to understand what nodes of the model your function is eligible to be placed in. `[0]` is the (inclusive) lower bound on the number of arguments, and `[1]` is the (inclusive) upper bound, or `None` if your function can handle an infinite number of arguments. Many functions need an exact number of arguments and will thus provide the same value for both. The easiest way to define your arity is by simply assigning a constant 2-tuple of int.
+
+`isNoise`: Will be evaluated for truth. If `true`, then your function is eligible to be selected as a noise function to represent imperfect analysis tools and alter a column before it is printed (but after it has affected later calculations). Set to True only for 1-ary functions that are appropriate for this purpose- most functions will not be.
+
+`generate_name`: A function of the same arity as `calculate`. Takes strings and returns a string. The parameters are the names of the things being provided as input to your calculation function, in the same order the inputs themselves are provided. Your function must generate a descriptive name, dropping the names of the previous levels in to explain the calculation being performed in your `calculate` function. This is used to generate column and GraphViz node names. The parameters may be symbolic or descriptive; if they are nested descriptions from previous levels, they will already be surrounded by parentheses. If your function has a reasonable expression as infix mathematical operations, use that form; express it as a function call only if no better ideas come to mind. (They probably won't in most cases, though.)
