@@ -25,7 +25,7 @@ The details of these behaviors are highly configurable.
 
 This setting cannot be specified in a configuration file, since it doesn't seem useful to let config files chain load each other:
 
-||*Long option name*||*Short option switch*||*Argument*||*Description*||
+|| *Long option name* || *Short option switch* || *Argument* || *Description* ||
 ||--config||-c||A file path||Load a configuration file. If this switch is present, then before parsing any other options, this file will be loaded and processed by ConfigParser.||
 
 ==Output settings==
