@@ -7,10 +7,11 @@ At the top level of the fake-data-generator package, there is a script named fak
 
 =Behavior=
 
-`fake_data_generator`, on each run, produces two files:
+`fake_data_generator`, on each run, produces three files:
 
   * A .gv file containing a GraphViz representation of the model in DOT format, ready to be rendered
   * A .txt file containing the generated data set
+  * A .noisy.txt file containing the generated data set, using random noise functions on each column to simulate imperfect data sampling (see ModelBehavior and how the `isNoise` switch works)
 
 The details of these behaviors are highly configurable.
 
@@ -45,6 +46,7 @@ These settings affect the behaviors of the implemented model: what operations ma
 ||*Long option*||*Short option*||*Config var*||*Argument*||*Description*||*Default*||
 ||--behaviors||-b||Behaviors||One or more directory paths, separated with the OS path separator ('`;`' on POSIX systems)||These paths are searched for IModelBehavior plugins, and _all_ of them are loaded as ModelBehavior logic. If you'd like to be more selective, rearrange your plugin directories. This replaces the default ModelBehavior loadout (which is simply implemented with appropriate defaults for this setting), so you'll have to explicitly load the default behaviors if you want them.||`__file__`/../ModelBehavior _(where the defaults live)_||
 ||--pruner||-x||Pruner||`null`, `uniform`, `fractional`, `globalcutoff`, or `bigdelta`||Choose a pruning algorithm to thin the overly-dense generated graph down to something that looks like an interaction network. *In the future, this will allow loading your own pruner plugin,* but that's not implemented yet. Check source comments for how the five pruners behave. Check `config.py` for the full list of synonyms for the pruner names that are interpreted correctly.||`bigdelta`||
+||--unnoisiness||-u||UnNoisiness||An int||The number of times to add the identity function to the pool of functions that can be used to add noise to the noisy version of the data set. This represents an increased probability that a column will _not_ be altered (since the identity function returns its argument unchanged). If your selected ModelBehavior plugins include no noise functions (no plugins with `isNoise` set to `True`), this value _must_ be at least 1, or fake-data-generator will crash in the middle of model generation with a ValueError when it tries to pick a noise function to assign to the first column. If you would like every column to be noisy, and you have noise functions available, there's nothing wrong with 0.||3||
 
 ==Graph generation settings==
 
