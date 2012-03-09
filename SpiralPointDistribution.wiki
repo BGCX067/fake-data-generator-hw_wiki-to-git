@@ -1,0 +1,18 @@
+#summary Description of the fundamental basis of the graph generation.
+#labels theory
+
+<wiki:toc max_depth="2" />
+
+= Overview =
+
+Generating a random graph that is shaped vaguely like a plausible genomic interaction network is a hard problem because it is very poorly specified. Mathematically, what "looks like an interaction network"? The properties of appropriate graphs are mostly subjective, hard to quantify, and most plausible guesses turn out to be wrong.
+
+While there is a wide variety of canned random graph generation algorithms, the graphs they produce are generally inappropriate, due to having the wrong shape. Algorithms that are carefully tuned to make guarantees about uniform distribution of graph shapes are, categorically, not optimized for this space.
+
+A desperate attempt to get a working algorithm by computationally simulating the process of drawing circles on a sheet of paper and drawing edges between them and calling it a graph turns out to be the most effective algorithm of many tried, even though this causes what would ideally be a completely abstract graph algorithm to ricochet off computational geometry in the process.
+
+= History =
+= Approach =
+= Algorithm =
+= Weaknesses =
+= Tweakable Knobs =
