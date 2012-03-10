@@ -11,8 +11,43 @@ While there is a wide variety of canned random graph generation algorithms, the 
 
 A desperate attempt to get a working algorithm by computationally simulating the process of drawing circles on a sheet of paper and drawing edges between them and calling it a graph turns out to be the most effective algorithm of many tried, even though this causes what would ideally be a completely abstract graph algorithm to ricochet off computational geometry in the process.
 
-= History =
 = Approach =
+
+The algorithm that became the Spiral Point Distribution came after several unsuccessful designs for an algorithm defined purely by abstract graph theory. With no mathematical definition of a "good" graph forthcoming, and no success in defining one, developing an algorithm was purely a guessing game.
+
+With no success in abstract algorithms, I contemplated how, would, by hand, draw "something that looks like an interaction network." I came up with a sequence of steps like this:
+
+  # Draw circles in sort of cluster-y chain-like ways.
+  # Draw arrows between them that follow those paths and put crosslinks within clusters.
+  # Don't create any cycles.
+
+This is very much an "I know it when I see it" thing. But if attempts to mathematically create a graph with similar properties weren't working, what if I wrote a program to do exactly this?
+
+Now I had three different problems to solve, one of which was very easy- once I had the general shape right, making sure the graph was acyclic would be the simplest. What would put the nodes "in the right spot", and "draw edges" between them?
+
+==Placing points==
+
+Since I'm abstracting the problem to something where nodes have a _position_, then the most sensible way to represent one is a two-dimensional point. To assign them in random, but cluster-forming ways that also tend to form chains, I opted to place them in a circular pattern with a steadily-increasing radius. This also solved the "acyclic graph" problem: make all edges point "outwards" and no cycles can form.
+
+To cause clusters, instead of placing points randomly on the circle, I initially chose random angles at the current radius, found the geometrically nearest points, and adjusted the angle to be the average of the random angle and the points that wound up nearest. This approach leads to loose, meandering, branching clusters, which is exactly the pattern desired.
+
+==Drawing lines==
+
+A Delaunay triangulation provides a good start at connecting the nodes together. However, this provides too many edges; points that are apparently part of different groups and should be treated as such are bound together, since they are still "next to" each other in terms of region adjacency.
+
+Triangulating the region and then trimming out "long" edges was the order of the day. The Delaunay triangulation was converted to a directed graph with edges pointing outwards from the center, and edge weights equal to the Euclidean distance between nodes. This is where GraphPruning algorithms begin: finding edges that "should be" trimmed off the graph.
+
+Several pruning strategies have been tried, and three of them have been found to work acceptably; there's room for improvement in pruners, but the foundation seems sound.
+
 = Algorithm =
+
+The Spiral Point Distribution algorithm plots points in polar coordinates (converting between turns and radians because this actually results in the most practical function interface), but stores them in rectangular (Cartesian) coordinates for ease of nearest-neighbor and Euclidean distance calculation. It eventually outputs the set of points; the triangulation and conversion to a graph technically happens in a different module, although it's closely related.
+
+==Inputs==
+
+==Output==
+
+==Method==
+
 = Weaknesses =
 = Tweakable Knobs =
