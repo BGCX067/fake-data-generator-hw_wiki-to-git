@@ -45,6 +45,14 @@ The Spiral Point Distribution algorithm plots points in polar coordinates (conve
 
 ==Inputs==
 
+The Spiral Point Distribution takes six parameters. It is not a "true" mathematical function, since its behavior is randomized; calls with identical parameters will almost never produce identical results.
+
+  * *_nPoints_ --* Total number of points to generate (including seeds).
+  * *_nSeeds_ --* Number of points to place in the center circle, which will become the 0-ary "generator" nodes of the graph in the output
+  * *_r0_ --* Radius of the starting circle around which the seeds are evenly placed
+  * *_delta_ --* Amount to increase the radius by for each point
+  * *_spread_ --* Range, measured in turns (fractions of a full circle), for random generation of next angle
+  * *_lumpage_ --* Number of points to grab for clustering behavior
 ==Output==
 
 ==Method==
