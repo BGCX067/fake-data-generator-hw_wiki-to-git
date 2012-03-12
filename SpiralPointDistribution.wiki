@@ -94,5 +94,28 @@ end function
 
 Note that ret is storing values in Cartesian space, although many of the operations are polar. A strong argument can be made for storing ret as (x, y, theta) inside the function, then returning a list made from the (x, y) of ret to avoid several avoidable Cartesian-to-polar conversions. This is an implementation detail and can be revisited at any time.
 
+The Python source is not especially different from or especially less legible than the pseudocode written here. Python is like that.
+
 = Weaknesses =
+
+==Few seeds==
+
+spiralPointDistribution has trouble with 3 seeds, and is almost useless with 2 seeds. To produce a sane interaction network, the independent variables (the seeds, which become generators) need to interact in some way. With fewer seeds, the positioning at further-distant angles causes the points to take a longer time to converge. Increasing the number of seeds will generally increase the connectivity of the graph, rather than partition it into subtrees that take a longer time to converge.
+
+The severity of this problem can be mitigated somewhat by choosing a value for delta that is large relative to r0. 
+
+==Few nodes==
+
+The patterns created by spiralPointDistribution become clearer when they get some small amount of time to converge. Too few nodes will often also result in a degenerate graph that, after pruning, is tree-shaped or, worse, shaped like a linked list.
+
+There's no automated way currently written to test for graph degeneratices. Pay attention to the rendered graphs; if a model comes out fundamentally bogus, throw it out and spin again.
+
 = Tweakable Knobs =
+
+All of the input parameters to the function can be altered theoretically independently. _nPoints_ and _nSeeds_ are fundamental to the properties desired of the graph and are the primary settings; the other four settings are to shape the graph and build it as desired.
+
+The limited range for angles provided by _spread_ prevents chaos in the first few points from overwhelming cluster-shaped behavior and prevent branching-tree behavior from the outset. Values greater than 1 are not entirely senseless, as this results in angles that can be anywhere on the circle but are more likely to be in a fixed range. This is not a very precise mechanism, however. While this is the parameter that has the least effect on graph generation, it does have enough effects to be worth experimenting with. _Very low values will lock the generator and should be avoided._ Averaging makes it possible for a point to "go backwards" around the circle relative to the previous point; it is possible for a small _spread_ to result in the generator getting unavoidably "dragged back" to a single uneven column of points or a single cluster, causing a highly degenerate graph.
+
+_r0_ and _delta_ aren't really independent of each other; they are meaningful mostly as a ratio. The heavier the ratio is towards _r0_, the more the initial point placements will be separated spatially. High _r0_ results in graphs that are shaped approximately like trees for the first few "layers", and this separation increases with higher _r0_. Increasing _delta_ (or decreasing _r0_) therefore helps mitigate problems caused by a low number of seeds. Note that a graph with 1 seed does not generally degenerate, since the degeneracies are all related to insufficient connection between generators, and one generator can't expect any such interactions anyway.
+
+_z_, the cluster smoothing factor, has the strongest impact on graph shape. A value of 0 discards most of the algorithm and results in an unorganized point cloud, although _spread_ causes a generally spiral shape (especially at low values). Higher values create broad clusters that do not diverge or reshape significantly as more points are plotted. Values between 2 and 4 seem to work best for creating complex interaction networks. 1 is almost a special case, and creates a heavily-branching, web-like pattern with distinctly different properties that may be worth investigating as an alternate generator. Describing the shape of the graphs remains difficult; experimentation is encouraged.
