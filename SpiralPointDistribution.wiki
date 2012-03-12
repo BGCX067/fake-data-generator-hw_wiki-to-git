@@ -52,10 +52,47 @@ The Spiral Point Distribution takes six parameters. It is not a "true" mathemati
   * *_r0_ --* Radius of the starting circle around which the seeds are evenly placed
   * *_delta_ --* Amount to increase the radius by for each point
   * *_spread_ --* Range, measured in turns (fractions of a full circle), for random generation of next angle
-  * *_lumpage_ --* Number of points to grab for clustering behavior
+  * *_z_ --* Number of points to grab for clustering behavior
+
+
 ==Output==
 
+A list of points, represented as 2-tuples of float (representing x,y coordinates).
+
+The first _nSeeds_ of these points are arranged in a circle around the origin (0, 0), and the remainder of the list is in strictly increasing radius from the origin. The points will follow the clustered pattern typical of this algorithm.
+
 ==Method==
+
+With variable names as listed above for inputs, the exact algorithm is as follows, in pseudocode:
+
+{{{
+function spiralPointDistribution:
+    #sanity checks
+    assert nSeeds >= nPoints
+    warn if nSeeds == nPoints
+
+    ret = list containing nSeeds points arranged in an r0-radius circle around the origin
+
+    theta = 0
+    r = r0
+
+    while (length of ret) < nPoints:
+        increment r by delta
+        add a random angle between 0 and spread to theta
+        calculate Cartesian coordinates (x, y) from polar coordinates (r, theta)
+        closestZ = the closest z points in ret to (x, y)
+        allThetas = list of all angles in closestZ
+        append theta to allThetas
+        theta = mean(allThetas)
+        recalculate (x, y) from (r, theta) #with theta updated
+        append (x, y) to ret
+    end while
+
+    return ret
+end function
+}}}
+
+Note that ret is storing values in Cartesian space, although many of the operations are polar. A strong argument can be made for storing ret as (x, y, theta) inside the function, then returning a list made from the (x, y) of ret to avoid several avoidable Cartesian-to-polar conversions. This is an implementation detail and can be revisited at any time.
 
 = Weaknesses =
 = Tweakable Knobs =
