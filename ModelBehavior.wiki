@@ -30,11 +30,11 @@ Plain `__init__`: If your class has an `__init__` method, it must take no argume
 
 ==Yapsy plugin requirements==
 
-Plugin loading is performed via the Yapsy 1.9 plugin framework. Therefore, each plugin requires a plugin info file. The documentation for these files is [http://yapsy.sourceforge.net/PluginManager.html#plugin-info-file-format available via Yapsy's docs]. 
+Plugin loading is performed via the Yapsy 1.9 plugin framework. (See YapsyFramework for information on installation and usage.) Therefore, each plugin requires a plugin info file. The documentation for these files is [http://yapsy.sourceforge.net/PluginManager.html#plugin-info-file-format available via Yapsy's docs]. 
 
 The metadata contained in the `.yapsy-plugin` files is almost unused by fake-data-generator, so automatically generating these files by the batch is a fine strategy, saving a significant amount of time and pointless effort if creating more than one or two IModelBehavior plugins at once. The yapsyPluginInfoEverything script sitting around in the source tree somewhere lets you do exactly this; change its constants to refer to you instead of me.
 
-=Useful "features=
+=Useful "features" =
 
 The way IModelBehavior is used guarantees some behaviors that can be potentially useful- useful enough that IModelBehavior guarantees this. They can be counterintuitive, however.
 
